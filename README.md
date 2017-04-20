@@ -1,2 +1,2 @@
-# tada-s.github.io
-A site for everything
+# inpHeXionJS
+A Masahiro Nakajima's game inpHeXion implemented in Javascript
