@@ -3,7 +3,7 @@
 <html>
 <head>
 	<title>inpHeXionJS</title>
-	<meta charset="UTF-8"> 
+	<meta charset="UTF-8">
 	<link rel="stylesheet" type="text/css" href="style.css">
 
 </head>
@@ -14,14 +14,20 @@
 	</div>
 
 	<!-- Text and game -->
-	<div class="body">
-		<p>inpHeXionJS is a javascript implementation of the board game inpHeXion invented by Masahiro Nakajima. Required HTML5 canvas support</p>
+	<div class="body" id="qwer">
+		<p>
+		inpHeXionJS is a javascript implementation of the board game inpHeXion invented by Masahiro Nakajima.
+		HTML5 required.
+		Game rules in <a href="http://www.nakajim.net/index.php?inpHeXion%20(English)">English</a> and <a href="http://www.nakajim.net/index.php?inpHeXion">Japanese</a>.
+<i class="fa fa-external-link" aria-hidden="true"></i>
+		</p>
 
 		<canvas id="canvasGame" width="800px" height="600px"></canvas>
 	</div>
 
 	<!-- Disclaimer -->
 	<div class="footer">
+
 		<h4>Disclaimer</h4> <br>
 		
 		This site is meant for educational purposes only.
@@ -37,10 +43,11 @@
 	</div>
 	
 	
-	<script src="game.js"></script>
+	<script src="coordinates.js"></script>
 	<script src="events.js"></script>
 	<script src="draw.js"></script>
 	<script src="inpHeXion.js"></script>
 
 </body>
 </html>
+

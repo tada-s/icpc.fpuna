@@ -1,14 +1,26 @@
-var canvas, ctx;
-var sqr3_2 = Math.sqrt(3) / 2;
-var hexX = [0, sqr3_2, sqr3_2, 0, -sqr3_2, -sqr3_2];
-var hexY = [1, 0.5, -0.5, -1, -0.5, 0.5];
+/* 
+ * This javascript renders in canvas.
+ */
 
-function setupDraw(){
+var canvas, ctx;
+
+var boardReady = false;
+var boardCanvas, boardCtx, boardImageData;
+
+/** Initialization **/
+
+function initDraw(){
 	canvas = document.getElementById("canvasGame");
 	ctx = canvas.getContext("2d");
-	width = canvas.width;
-	height = canvas.height;
+	
+	boardReady = false;
+	boardCanvas = document.createElement("canvas");
+	boardCanvas.width = 800;
+	boardCanvas.height = 600;
+	boardCtx = boardCanvas.getContext("2d");
 }
+
+/** Main draw **/
 
 function draw(){
 	clearCanvas();
@@ -16,6 +28,131 @@ function draw(){
 	drawBoardCells();
 	drawDisks();
 	drawMessage();
+}
+
+/** Main draw methods **/
+
+function clearCanvas(){
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function drawBoardBack(){
+	if(boardReady){
+		ctx.putImageData(boardImageData, 0, 0);
+	}else{
+		console.log(":D");
+		boardCtx.clearRect(0, 0, boardCanvas.width, boardCanvas.height);
+		boardCtx.lineJoin = "round";
+		// Shadow
+		boardCtx.lineWidth = 30;
+		boardCtx.strokeStyle = "rgba(0, 0, 0, 0.3)";
+		var shadowOrder = [0, 1, 2, 3, 0];
+		var shadowX = [];
+		var shadowY = [];
+		for(var i = 0; i < shadowOrder.length; i++){
+			shadowX.push(coordBoardPolygonX[shadowOrder[i]]);
+			shadowY.push(coordBoardPolygonY[shadowOrder[i]]);
+		}
+		drawPolygon(shadowX, shadowY);
+		boardCtx.stroke();
+		// Edges
+		boardCtx.lineWidth = 20;
+		// Black Edge
+		boardCtx.strokeStyle = "rgba(0, 0, 0, 1)";
+		boardCtx.fillStyle = "rgba(0, 0, 0, 1)";
+		var blackEdgeOrder = [0, 3, 1, 2, 0];
+		var blackEdgeX = [];
+		var blackEdgeY = [];
+		for(var i = 0; i < shadowOrder.length; i++){
+			blackEdgeX.push(coordBoardPolygonX[blackEdgeOrder[i]]);
+			blackEdgeY.push(coordBoardPolygonY[blackEdgeOrder[i]]);
+		}
+		drawPolygon(blackEdgeX, blackEdgeY);
+		boardCtx.fill();
+		boardCtx.stroke();
+		// White Edge
+		boardCtx.strokeStyle = "rgba(255, 255, 255, 1)";
+		boardCtx.fillStyle = "rgba(255, 255, 255, 1)";
+		var whiteEdgeOrder = [0, 1, 3, 2, 0];
+		var whiteEdgeX = [];
+		var whiteEdgeY = [];
+		for(var i = 0; i < shadowOrder.length; i++){
+			whiteEdgeX.push(coordBoardPolygonX[whiteEdgeOrder[i]]);
+			whiteEdgeY.push(coordBoardPolygonY[whiteEdgeOrder[i]]);
+		}
+		drawPolygon(whiteEdgeX, whiteEdgeY);
+		boardCtx.fill();
+		boardCtx.stroke();
+		boardImageData = boardCtx.getImageData(0, 0, boardCanvas.width, boardCanvas.height);
+		ctx.putImageData(boardImageData, 0, 0);
+		boardReady = true;
+	}
+}
+
+function drawBoardCells(){
+	ctx.strokeStyle = "rgba(255, 255, 255, 1)";
+	ctx.fillStyle = "rgba(225, 0, 0, 1)";
+	ctx.lineWidth = 2;
+	for(var i = 0; i < board.cellRow; i++){
+		for(var j = 0; j < board.cellColumn; j++){
+			var x = getCellX(i, j);
+			var y = getCellY(i, j);
+			pathHexagon(x, y, sizeBoardCell);
+			ctx.fill();
+		}
+	}
+	for(var i = 0; i < board.cellRow; i++){
+		for(var j = 0; j < board.cellColumn; j++){
+			var x = getCellX(i, j);
+			var y = getCellY(i, j);
+			pathHexagon(x, y, sizeBoardCell);
+			ctx.stroke();
+		}
+	}
+	ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
+	if(isSelected){
+		var x = getCellX(selectedCell.i, selectedCell.j);
+		var y = getCellY(selectedCell.i, selectedCell.j);
+		pathHexagon(x, y, sizeBoardCell);
+		ctx.fill();
+		ctx.stroke();
+	}
+}
+
+function drawDisks(){
+	// Draw static disks
+	for(var i = 0; i < board.cellRow; i++){
+		for(var j = 0; j < board.cellColumn; j++){
+			if(board.cell[i][j] != CELL_EMPTY && (!isMouseDragging || (isMouseDragging && !(dragStartCell.i == i && dragStartCell.j == j)))){
+				var x = getCellX(i, j);
+				var y = getCellY(i, j);
+			
+				ctx.lineWidth = 4;
+				if(board.cell[i][j] == CELL_BLACK){
+					ctx.fillStyle = "rgba(0, 0, 0, 1)";
+				}else{
+					ctx.fillStyle = "rgba(255, 255, 255, 1)";
+				}
+				ctx.strokeStyle = "rgba(0, 0, 0, 0)";
+				fillDisc(x, y, sizeDisk);
+			}
+		}
+	}
+	// Draw dragged disk
+	if(isMouseDragging && (board.cell[dragStartCell.i][dragStartCell.j] != CELL_EMPTY)){
+		var x = getCellX(dragStartCell.i, dragStartCell.j);
+		var y = getCellY(dragStartCell.i, dragStartCell.j);
+		if(isMovable(dragStartCell.i, dragStartCell.j)){
+			x += mouse.x - dragStartMouse.x;
+			y += mouse.y - dragStartMouse.y;
+		}
+		if(board.cell[dragStartCell.i][dragStartCell.j] == CELL_BLACK){
+			ctx.fillStyle = "rgba(0, 0, 0, 1)";
+		}else{
+			ctx.fillStyle = "rgba(255, 255, 255, 1)";
+		}
+		fillDisc(x, y, sizeDisk);
+	}
 }
 
 function drawMessage(){
@@ -33,134 +170,50 @@ function drawMessage(){
 	}
 }
 
-function isInHexagon(x, y, hX, hY, size){
-	for(var i = 0; i < 6; i++){
-		var midX = (hexX[i] + hexX[(i + 1) % 6]) * size / 2 + hX;
-		var midY = (hexY[i] + hexY[(i + 1) % 6]) * size / 2 + hY;
-
-		var vX = midX - hX;
-		var vY = midY - hY;
-		var wX = x - midX;
-		var wY = y - midY;
-		if(vX * wX + vY * wY > 0){
-			return false;
-		}
+function getGameMessage(){
+	switch(gameState){
+		case STATE_NONE:
+			return "Click to start a new game";
+/*		case STATE_WHITE_SELECT:
+			return "White Player: Select a Black disk to move";*/
+		case STATE_WHITE_MOVE:
+			return "White Player: Select an Empty cell to place the Black disk";
+		case STATE_WHITE_PLACE:
+			return "White Player: Select an Empty cell to place a White disk";
+/*		case STATE_WHITE_SURROUND_SELECT:
+			return "White Player: Select a surrounded Black disk to move";*/
+		case STATE_WHITE_SURROUND_MOVE:
+			return "White Player: Select an Empty cell to place the Black disk";
+		case STATE_WHITE_WINS:
+			return "White Player Win!";
+/*		case STATE_BLACK_SELECT:
+			return "Black Player: Select a White disk to move";*/
+		case STATE_BLACK_MOVE:
+			return "Black Player: Select an Empty cell to place the White disk";
+/*		case STATE_BLACK_PLACE:
+			return "Black Player: Select an Empty cell to place a Black disk";*/
+/*		case STATE_BLACK_SURROUND_SELECT:
+			return "Black Player: Select a surrounded White disk to move";*/
+		case STATE_BLACK_SURROUND_MOVE:
+			return "Black Player: Select an Empty cell to place the White disk";
+		case STATE_BLACK_WINS:
+			return "Black Player Win!";
+		case STATE_DRAW:
+			return "Draw Game";
+		default:
+			return "";
 	}
-	return true;
 }
 
-function clearCanvas(){
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
-
-function drawMouse(x, y){
-	ctx.fillStyle="red";
-	ctx.fillRect(x, y, 10, 10);
-}
-
-function drawBoardBack(){
-	var borderSize = 0;
-
-	var deltaX = 2 * board.cellSize * sqr3_2;
-	var deltaY = 3 / 2 * board.cellSize;
-	var border1DeltaX = Math.sqrt(3) * (borderSize + board.cellSize) * 1;
-	var border1DeltaY = borderSize + board.cellSize * 1;
-	var border2DeltaX = Math.sqrt(3) / 3 * (borderSize + board.cellSize);
-	var border2DeltaY = board.cellSize + borderSize;
-	var x0 = board.screenOffX - border1DeltaX;
-	var y0 = board.screenOffY - border1DeltaY;
-	var x1 = board.screenOffX + (board.cellColumn - 1) * board.cellSize * sqr3_2 - border2DeltaX;
-	var y1 = board.screenOffY + (board.cellColumn - 1) * deltaY + border2DeltaY;
-	var x2 = board.screenOffX + (board.cellRow - 1) * deltaX + (board.cellColumn - 1) * board.cellSize * sqr3_2 + border1DeltaX;
-	var y2 = board.screenOffY + (board.cellColumn - 1) * deltaY + border1DeltaY;
-	var x3 = board.screenOffX + (board.cellRow - 1) * deltaX + border2DeltaX;
-	var y3 = board.screenOffY - border2DeltaY;
-
-	ctx.lineJoin = "round";
-
-	// Shadow
-	ctx.lineWidth = 30;
-	ctx.strokeStyle = "rgba(0, 0, 0, 0.3)";
-	var shadowX = [x0, x1, x2, x3, x0];
-	var shadowY = [y0, y1, y2, y3, y0];
-	drawPolygon(shadowX, shadowY);
-	ctx.stroke();
-	// Edges
-	ctx.lineWidth = 20;
-	// Black Edge
-	ctx.strokeStyle = "rgba(0, 0, 0, 1)";
-	ctx.fillStyle = "rgba(0, 0, 0, 1)";
-	var blackEdgeX = [x0, x3, x1, x2, x0];
-	var blackEdgeY = [y0, y3, y1, y2, y0];
-	drawPolygon(blackEdgeX, blackEdgeY);
-	ctx.fill();
-	ctx.stroke();
-	// White Edge
-	ctx.strokeStyle = "rgba(255, 255, 255, 1)";
-	ctx.fillStyle = "rgba(255, 255, 255, 1)";
-	var whiteEdgeX = [x0, x1, x3, x2, x0];
-	var whiteEdgeY = [y0, y1, y3, y2, y0];
-	drawPolygon(whiteEdgeX, whiteEdgeY);
-	ctx.fill();
-	ctx.stroke();
-}
+/** Auxiliar drawing methods **/
 
 function drawPolygon(x, y){
-	ctx.beginPath();
-	ctx.moveTo(x[0], y[0]);
+	boardCtx.beginPath();
+	boardCtx.moveTo(x[0], y[0]);
 	for(var i = 1; i < x.length; i++){
-		ctx.lineTo(x[i], y[i]);
+		boardCtx.lineTo(x[i], y[i]);
 	}
-	ctx.closePath();
-}
-
-function drawBoardCells(){
-
-
-	var deltaX = 2 * board.cellSize * sqr3_2;
-	var deltaY = 3 / 2 * board.cellSize;
-	
-	for(var i = 0; i < board.cellRow; i++){
-		for(var j = 0; j < board.cellColumn; j++){
-			var x = board.screenOffX + i * deltaX + j * board.cellSize * sqr3_2;
-			var y = board.screenOffY + j * deltaY;
-			ctx.lineWidth = 4;
-			ctx.strokeStyle = "rgba(255, 255, 255, 1)";
-			ctx.fillStyle = "rgba(225, 0, 0, 1)";
-			drawHexagon(x, y, board.cellSize);
-			fillHexagon(x, y, board.cellSize);
-			
-			if(isInHexagon(mouse.x, mouse.y, x, y, board.cellSize)){
-				ctx.strokeStyle = "rgba(0, 0, 0, 1)";
-				ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
-				fillHexagon(x, y, board.cellSize);
-			}
-		}
-	}
-}
-
-function drawDisks(){
-	var deltaX = 2 * board.cellSize * sqr3_2;
-	var deltaY = 3 / 2 * board.cellSize;
-	
-	for(var i = 0; i < board.cellRow; i++){
-		for(var j = 0; j < board.cellColumn; j++){
-			if(board.cell[i][j] == CELL_BLACK || board.cell[i][j] == CELL_WHITE){
-				var x = board.screenOffX + i * deltaX + j * board.cellSize * sqr3_2;
-				var y = board.screenOffY + j * deltaY;
-				var diskSize = board.cellSize * 0.6;
-				
-				ctx.lineWidth = 4;
-				if(board.cell[i][j] == CELL_BLACK){
-					ctx.fillStyle = "rgba(0, 0, 0, 1)";
-				}else{
-					ctx.fillStyle = "rgba(255, 255, 255, 1)";
-				}
-				ctx.strokeStyle = "rgba(0, 0, 0, 0)";
-				fillDisc(x, y, diskSize);
-			}
-		}
-	}
+	boardCtx.closePath();
 }
 
 function fillDisc(x, y, size){
@@ -170,23 +223,11 @@ function fillDisc(x, y, size){
 	ctx.stroke();
 }
 
-function drawHexagon(x, y, size){
-	pathHexagon(x, y, size);
-	ctx.stroke();
-}
-
-function fillHexagon(x, y, size){
-	pathHexagon(x, y, size);
-	ctx.closePath();
-	ctx.fill();
-}
-
 function pathHexagon(x, y, size){
 	ctx.beginPath();
-	ctx.moveTo(x + hexX[5] * size, y + hexY[5] * size);
+	ctx.moveTo(x + coordHexagonX[5] * size, y + coordHexagonY[5] * size);
 	for(var i = 0; i < 6; i++){
-		ctx.lineTo(x + hexX[i] * size, y + hexY[i] * size);
+		ctx.lineTo(x + coordHexagonX[i] * size, y + coordHexagonY[i] * size);
 	}
 	ctx.closePath();
 }
-

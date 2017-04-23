@@ -7,23 +7,23 @@ body{
 }
 
 div.header{
-	padding-top: 5px;
-	padding-left: 50px;
+	padding-top: 0.3%;
+	padding-left: 3%;
 }
 
 div.body{
 	background-color:#f8f8f8;
-	padding-top: 5px;
-	padding-left: 40px;
-	padding-bottom: 10px;
+	padding-top: 0.5%;
+	padding-left: 2.5%;
+	padding-bottom: 0.5%;
 }
 
 div.footer{
 	margin:0;
-	padding-top: 20px;
-	padding-left: 50px;
-	padding-bottom: 10px;
-	padding-right: 50px;
+	padding-top: 1.25%;
+	padding-left: 3%;
+	padding-bottom: 1.25%;
+	padding-right: 3%;
 	font-size:70%;
 }
 
