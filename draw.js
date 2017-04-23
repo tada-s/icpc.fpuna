@@ -37,15 +37,15 @@ function clearCanvas(){
 }
 
 function drawBoardBack(){
-	if(boardReady){
+	/*if(boardReady){
 		ctx.putImageData(boardImageData, 0, 0);
-	}else{
+	}else{*/
 		console.log(":D");
-		boardCtx.clearRect(0, 0, boardCanvas.width, boardCanvas.height);
-		boardCtx.lineJoin = "round";
+		ctx.clearRect(0, 0, boardCanvas.width, boardCanvas.height);
+		ctx.lineJoin = "round";
 		// Shadow
-		boardCtx.lineWidth = 30;
-		boardCtx.strokeStyle = "rgba(0, 0, 0, 0.3)";
+		ctx.lineWidth = 30;
+		ctx.strokeStyle = "rgba(0, 0, 0, 0.3)";
 		var shadowOrder = [0, 1, 2, 3, 0];
 		var shadowX = [];
 		var shadowY = [];
@@ -54,12 +54,12 @@ function drawBoardBack(){
 			shadowY.push(coordBoardPolygonY[shadowOrder[i]]);
 		}
 		drawPolygon(shadowX, shadowY);
-		boardCtx.stroke();
+		ctx.stroke();
 		// Edges
-		boardCtx.lineWidth = 20;
+		ctx.lineWidth = 20;
 		// Black Edge
-		boardCtx.strokeStyle = "rgba(0, 0, 0, 1)";
-		boardCtx.fillStyle = "rgba(0, 0, 0, 1)";
+		ctx.strokeStyle = "rgba(0, 0, 0, 1)";
+		ctx.fillStyle = "rgba(0, 0, 0, 1)";
 		var blackEdgeOrder = [0, 3, 1, 2, 0];
 		var blackEdgeX = [];
 		var blackEdgeY = [];
@@ -68,11 +68,11 @@ function drawBoardBack(){
 			blackEdgeY.push(coordBoardPolygonY[blackEdgeOrder[i]]);
 		}
 		drawPolygon(blackEdgeX, blackEdgeY);
-		boardCtx.fill();
-		boardCtx.stroke();
+		ctx.fill();
+		ctx.stroke();
 		// White Edge
-		boardCtx.strokeStyle = "rgba(255, 255, 255, 1)";
-		boardCtx.fillStyle = "rgba(255, 255, 255, 1)";
+		ctx.strokeStyle = "rgba(255, 255, 255, 1)";
+		ctx.fillStyle = "rgba(255, 255, 255, 1)";
 		var whiteEdgeOrder = [0, 1, 3, 2, 0];
 		var whiteEdgeX = [];
 		var whiteEdgeY = [];
@@ -81,12 +81,12 @@ function drawBoardBack(){
 			whiteEdgeY.push(coordBoardPolygonY[whiteEdgeOrder[i]]);
 		}
 		drawPolygon(whiteEdgeX, whiteEdgeY);
-		boardCtx.fill();
-		boardCtx.stroke();
-		boardImageData = boardCtx.getImageData(0, 0, boardCanvas.width, boardCanvas.height);
+		ctx.fill();
+		ctx.stroke();
+/*		boardImageData = boardCtx.getImageData(0, 0, boardCanvas.width, boardCanvas.height);
 		ctx.putImageData(boardImageData, 0, 0);
 		boardReady = true;
-	}
+	}*/
 }
 
 function drawBoardCells(){
@@ -208,12 +208,12 @@ function getGameMessage(){
 /** Auxiliar drawing methods **/
 
 function drawPolygon(x, y){
-	boardCtx.beginPath();
-	boardCtx.moveTo(x[0], y[0]);
+	ctx.beginPath();
+	ctx.moveTo(x[0], y[0]);
 	for(var i = 1; i < x.length; i++){
-		boardCtx.lineTo(x[i], y[i]);
+		ctx.lineTo(x[i], y[i]);
 	}
-	boardCtx.closePath();
+	ctx.closePath();
 }
 
 function fillDisc(x, y, size){
