@@ -1,0 +1,65 @@
+/* Font */
+@font-face {
+    font-family: arcon;
+    src: url('../Arcon-Regular.otf') format("opentype");
+}
+
+h1,h2,h3,h4{
+	font-family: arcon;
+}
+
+/* Document body */
+body{
+	background-image: url('../gplaypattern.png');
+}
+
+/* Top */
+.page-title{
+	padding-top: 20px;
+}
+
+h1 img.title-logo {
+  height: 1.7em;
+  padding-left: 0.3em;
+  padding-right: 0.3em;
+}
+
+.nav-bar{
+	margin-top: 10px;
+	margin-bottom: 10px;
+	background-color:#2a4d8222;
+}
+
+.nav-bar li{
+    display:inline-block;
+}
+
+.nav-bar li a{
+	font-family: arcon;
+    display:block;
+    padding: 10px 20px;
+    color:#1b93e2;
+    border-radius: 2px;
+    -webkit-transition: background 0.5s linear;
+    -moz-transition: background 0.5s linear;
+    -ms-transition: background 0.5s linear;
+    -o-transition: background 0.5s linear;
+    transition: background 0.5s linear;
+}
+
+.nav-bar li a:hover{
+    background-color: #1b93e2;
+    color:#fff;
+}
+
+/* Body Container */
+
+
+
+
+
+.aviso{
+		font-size:80%;
+
+}
+
