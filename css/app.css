@@ -1,7 +1,7 @@
 /* Font */
 @font-face {
     font-family: arcon;
-    src: url('../Arcon-Regular.otf') format("opentype");
+    src: url('../other/Arcon-Regular.otf') format("opentype");
 }
 
 h1,h2,h3,h4{
@@ -10,7 +10,7 @@ h1,h2,h3,h4{
 
 /* Document body */
 body{
-	background-image: url('../gplaypattern.png');
+	background-image: url('../images/gplaypattern.png');
 }
 
 /* Top */
@@ -54,9 +54,31 @@ h1 img.title-logo {
 
 /* Body Container */
 
+ul.calendario-semana li {
+	background-color: #2a4d8222;
+	padding-left: 5px;
+	padding-right: 5px;
+	border-left: 1px solid gray;
+	border-right: 1px solid gray;
+}
 
+ul.basic-inline-list{
+	list-style-type: none;
+}
+ul.basic-inline-list li{
+	display:inline-block;
+}
 
-
+.ediciones-anteriores li{
+	border-style: solid;
+    border-width: 1px;
+	border-color:#D3D3D3;
+	/*padding-top:10px;
+	padding-bottom:10px;
+	padding-left:10px;
+	padding-right:10px;
+	margin-bottom:5px;*/
+}
 
 .aviso{
 		font-size:80%;
