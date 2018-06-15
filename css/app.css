@@ -5,17 +5,17 @@
 }
 
 h1,h2,h3,h4{
-	font-family: arcon;
+    font-family: arcon;
 }
 
 /* Document body */
 body{
-	background-image: url('../images/gplaypattern.png');
+    background-image: url('../images/gplaypattern.png');
 }
 
 /* Top */
 .page-title{
-	padding-top: 20px;
+    padding-top: 20px;
 }
 
 h1 img.title-logo {
@@ -25,9 +25,9 @@ h1 img.title-logo {
 }
 
 .nav-bar{
-	margin-top: 10px;
-	margin-bottom: 10px;
-	background-color:#2a4d8222;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color:#2a4d8222;
 }
 
 .nav-bar li{
@@ -35,7 +35,7 @@ h1 img.title-logo {
 }
 
 .nav-bar li a{
-	font-family: arcon;
+    font-family: arcon;
     display:block;
     padding: 10px 20px;
     color:#1b93e2;
@@ -55,33 +55,97 @@ h1 img.title-logo {
 /* Body Container */
 
 ul.calendario-semana li {
-	background-color: #2a4d8222;
-	padding-left: 5px;
-	padding-right: 5px;
-	border-left: 1px solid gray;
-	border-right: 1px solid gray;
+    background-color: #2a4d8222;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
 }
 
 ul.basic-inline-list{
-	list-style-type: none;
+    list-style-type: none;
 }
 ul.basic-inline-list li{
-	display:inline-block;
+    display:inline-block;
 }
 
 .ediciones-anteriores li{
-	border-style: solid;
+    border-style: solid;
     border-width: 1px;
-	border-color:#D3D3D3;
-	/*padding-top:10px;
-	padding-bottom:10px;
-	padding-left:10px;
-	padding-right:10px;
-	margin-bottom:5px;*/
+    border-color:#D3D3D3;
+    /*padding-top:10px;
+    padding-bottom:10px;
+    padding-left:10px;
+    padding-right:10px;
+    margin-bottom:5px;*/
 }
 
 .aviso{
-		font-size:80%;
+        font-size:80%;
 
 }
 
+.gradient_title {
+    padding-left:10px;
+    background:
+        linear-gradient(
+            to right,
+            rgba(0, 0, 0, 0.05),
+            rgba(255,255,255, 0    )
+        );
+}
+
+.banner {
+  width: 100%;
+  padding-bottom: 25px;
+  padding-left: 25px;
+  padding-right: 25px;
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.banner h1, .banner h3{
+    color:white;
+}
+
+.banner-entrenamiento {
+  background: 
+    linear-gradient(to right,
+      rgba(0, 0, 0, 0.8), 
+      rgba(0, 0, 0, 0.01)
+    ) no-repeat,
+    url(../images/banner_entrenamiento.jpg) no-repeat left center;
+}
+
+.banner-entrenamiento2 {
+      width: 100%;
+  padding-bottom: 25px;
+  padding-left: 25px;
+  padding-right: 25px;
+  background-size: 100%;
+  background-position: 50% 50%;
+  background: 
+    linear-gradient(to right,
+      rgba(0, 0, 0, 0.8), 
+      rgba(0, 0, 0, 0.01)
+    ) no-repeat,
+    url(../images/banner.jpg) no-repeat ;
+}
+
+.banner-concurso {
+  background: 
+    linear-gradient(to right,
+      rgba(0, 0, 0, 0.8), 
+      rgba(0, 0, 0, 0.01)
+    ) no-repeat,
+    url(../images/banner_concurso.jpg) no-repeat left center;
+}
+
+.banner-regionals {
+  background: 
+    linear-gradient(to right,
+      rgba(0, 0, 0, 0.8), 
+      rgba(0, 0, 0, 0.01)
+    ) no-repeat,
+    url(../images/banner_regionals.jpg) no-repeat left center;
+}
